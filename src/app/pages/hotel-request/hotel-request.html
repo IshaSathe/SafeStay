@@ -1,1 +1,107 @@
-<p>hotel-request works!</p>
+<div class="card">
+    <h1>Past Request</h1>
+
+    <!-- Past requests -->
+    <div class="past" *ngIf="mine().length">
+        <h2>Your past requests</h2>
+        <div class="past-list">
+            <div class="past-card" *ngFor="let r of mine()">
+                <div class="row">
+                    <div>
+                        <strong>#{{ r.id }}</strong>
+                    </div>
+                    <div class="status">{{ r.status }}</div>
+                </div>
+                <div class="sub">{{ r.startDate | date:'MMM d' }} → {{ r.endDate | date:'MMM d, y' }}</div>
+                <div class="bar">
+                    <div class="fill" [style.width.%]="r.percent"></div>
+                </div>
+                <div class="nums">
+                    <span>Raised: {{ (r.raisedCents/100) | currency:'USD' }}</span>
+                    <span *ngIf="r.goalCents">&nbsp;/ Goal: {{ (r.goalCents/100) | currency:'USD' }}</span>
+                    <span *ngIf="!r.goalCents" class="muted">No goal set</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Create a hotel request</h1>
+
+    <!-- Step 1: form -->
+    <form [formGroup]="form" (ngSubmit)="runSearch()" novalidate>
+        <div class="grid">
+            <label>
+                <span>Check-in</span>
+                <input type="date" formControlName="startDate" />
+            </label>
+            <label>
+                <span>Check-out</span>
+                <input type="date" formControlName="endDate" />
+            </label>
+            <label>
+                <span>Guests</span>
+                <input type="number" min="1" formControlName="guests" />
+            </label>
+            <label>
+                <span>Rooms</span>
+                <input type="number" min="1" formControlName="rooms" />
+            </label>
+            <label>
+                <span>City Code (IATA)</span>
+                <input type="text" placeholder="PHX / LAX / DEL" formControlName="cityCode" />
+            </label>
+        </div>
+
+        <label class="block">
+            <span>Notes (optional)</span>
+            <textarea rows="3" formControlName="notes"
+                placeholder="Accessibility needs, pet-friendly, proximity, etc."></textarea>
+        </label>
+
+        <button class="btn" type="submit" [disabled]="loading()">Search hotels</button>
+    </form>
+
+    <p class="err" *ngIf="error()">{{ error() }}</p>
+
+    <!-- Step 2: results -->
+    <div *ngIf="results().length" class="results">
+        <h2>Available hotels</h2>
+
+        <div *ngFor="let g of results()" class="hotel">
+            <div class="hotel-head">
+                <div>
+                    <strong>{{ g.hotel.name || g.hotel.hotelId }}</strong>
+                    <div class="sub">{{ g.hotel.address }}</div>
+                    <div class="sub">City: {{ g.hotel.cityCode }}</div>
+                </div>
+                <div>
+                    <button class="link" (click)="pick(g)">Select hotel</button>
+                </div>
+            </div>
+
+            <div class="offers" *ngIf="g.offers?.length">
+                <div class="offer" *ngFor="let o of g.offers">
+                    <div class="offer-main">
+                        <div>{{ o.room || 'Room' }} — {{ o.price.total }} {{ o.price.currency }}</div>
+                        <div class="sub">{{ o.description }}</div>
+                    </div>
+                    <button class="link" (click)="pick(g, o.id)">
+                        Select this offer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visual selection state -->
+            <div class="chosen" *ngIf="selected()?.hotelId === g.hotel.hotelId">
+                Selected: Hotel {{ g.hotel.name || g.hotel.hotelId }}
+                <span *ngIf="selected()?.offerId"> (offer {{ selected()?.offerId }})</span>
+            </div>
+        </div>
+
+        <!-- Step 3: save -->
+        <button class="btn primary" (click)="saveRequest()" [disabled]="!selected() || loading()">
+            {{ loading() ? 'Saving…' : 'Save request' }}
+        </button>
+        <p class="ok" *ngIf="savedId()">Request #{{ savedId() }} saved.</p>
+    </div>
+</div>

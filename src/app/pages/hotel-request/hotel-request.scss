@@ -1,0 +1,43 @@
+.card {
+  max-width: 900px; margin: 2rem auto; padding: 1.25rem;
+  border: 1px solid #e5e7eb; border-radius: 12px; background: #fff;
+
+  h1 { font-size: 1.25rem; margin-bottom: 1rem; }
+  h2 { margin-top: 1rem; font-size: 1.1rem; }
+
+  .grid {
+    display: grid; gap: .75rem;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+  label { display: block; }
+  input, textarea { width: 100%; padding: .5rem; border: 1px solid #d1d5db; border-radius: 8px; }
+
+  .btn { margin-top: .75rem; padding: .6rem .75rem; border: 0; border-radius: 8px; background: #111827; color: #fff; }
+  .btn.primary { background: #0f766e; }
+  .link { background: none; border: 0; color: #2563eb; cursor: pointer; }
+
+  .err { color: #b91c1c; margin-top: .5rem; }
+  .ok { color: #065f46; margin-top: .5rem; }
+
+  .results { margin-top: 1rem; }
+  .hotel { border: 1px solid #e5e7eb; border-radius: 10px; padding: .75rem; margin-bottom: .75rem; background: #fafafa; }
+  .hotel-head { display: flex; justify-content: space-between; align-items: start; }
+  .sub { color: #6b7280; font-size: .9rem; }
+  .offers { margin-top: .5rem; }
+  .offer { padding: .5rem; border-top: 1px dashed #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+  .offer-main { max-width: 70%; }
+  .chosen { margin-top: .5rem; color: #065f46; }
+}
+
+.past { margin-top: 1.25rem; }
+.past-list { display: grid; gap: .75rem; }
+.past-card {
+  border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; padding: .75rem;
+  .row { display:flex; justify-content:space-between; align-items:center; }
+  .sub { color:#6b7280; font-size:.9rem; }
+  .status { font-size:.9rem; color:#111827; }
+  .bar { height: 8px; background: #e5e7eb; border-radius: 6px; overflow: hidden; margin: .4rem 0; }
+  .fill { height: 100%; background: #10b981; }
+  .nums { display:flex; gap:.5rem; font-size:.9rem; }
+  .muted { color:#6b7280; }
+}
