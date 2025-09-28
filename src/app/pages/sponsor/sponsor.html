@@ -1,3 +1,75 @@
-<p>sponsor works!</p>
-<button routerLink="/give-homes">Give Homes</button>
-<button routerLink="/give-hotels">Give Hotels</button>
+<header class="navbar">
+  <img src="logo1.png" alt="My photo" style="display:inline-block" width="60" height="60">
+  <nav class="logo">
+    <a routerLink="/">SafeStay</a>
+  </nav>
+  <nav class="nav-links">
+    <a routerLink="/">Button</a>
+    <a routerLink="/">Testimonials</a>
+  </nav>
+  <button class="contact-btn">Contact Us</button>
+</header>
+
+<!-- top image-->
+<img src="neighborhood.jpg" alt="My photo" style="display:inline-block; align-items: center; object-fit: cover;  margin-left:20px; " width="1295" height="200">
+
+<!-- inital info-->
+ <section id="land-section" class="land-section">
+  <div class="land-content">
+    <h2>Provide a SafeStay</h2>
+    <p>
+        There are many different ways to gift a SafeStay, explore them below!
+    </p>
+    <button class="homesection-btn" href="javascript:void(0)" onclick="document.getElementById('home-section').scrollIntoView({behavior: 'smooth'})">
+    Homes</button>
+
+    <button  class="hotelsection-btn" href="javascript:void(0)" onclick="document.getElementById('hotel-section').scrollIntoView({behavior: 'smooth'})">
+    Hotels</button>
+  </div>
+</section>
+
+
+<!-- break bar-->
+<hr style="height: 3px; width: 1200px; background-color: rgb(123, 139, 114); border: none; margin-top: 10px">
+
+
+<!-- provide a home section -->
+<section id="home-section" class="home-section">
+  <div class="home-content">
+    <h2>Sponsor a Home</h2>
+    <p>
+      At SafeStay, we believe everyone deserves to feel at home.
+
+      Our platform connects caring individuals and organizations with opportunities to sponsor hotel rooms and other forms of temporary housing for people experiencing homelessness. By working together, we provide more than just shelter — we offer dignity, comfort, and the foundation for a fresh start. SafeStay is built on compassion, community, and the simple idea that when we care for each other, everyone is safer.
+    </p>
+    <button class="home-btn"routerLink="/give-homes">Provide a Home</button>
+  </div>
+
+  <div class="about-image">
+    <img src="airbnb.jpg" alt="My photo" style="display:inline-block; border-radius: 15px;" width="600px">
+  </div>
+</section>
+
+
+
+<!-- provide a hotel section -->
+<section id="hotel-section" class="hotel-section">
+    <div class="about-image">
+        <img src="hotel2.jpg" alt="My photo" style="display:inline-block; border-radius: 15px;" width="600px">
+    </div>
+  <div class="hotel-content">
+    <h2>Sponsor a Hotel</h2>
+    <p>
+      At SafeStay, we believe everyone deserves to feel at home.
+
+      Our platform connects caring individuals and organizations with opportunities to sponsor hotel rooms and other forms of temporary housing for people experiencing homelessness. By working together, we provide more than just shelter — we offer dignity, comfort, and the foundation for a fresh start. SafeStay is built on compassion, community, and the simple idea that when we care for each other, everyone is safer.
+    </p>
+    <button class="hotel-btn" routerLink="/give-hotels">Provide a Hotel</button>
+  </div>
+</section>
+
+
+
+
+
+
