@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HotelsService } from '../../services/hotels.service';
 import { NgIf, NgFor, DatePipe, CurrencyPipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule} from '@angular/router';
 
 type OfferGroup = {
   hotel: { hotelId: string; name?: string; cityCode?: string; address?: string };
@@ -18,7 +18,7 @@ type OfferGroup = {
 @Component({
   standalone: true,
   selector: 'app-hotel-request',
-  imports: [ReactiveFormsModule, NgIf, NgFor, DatePipe, CurrencyPipe],
+  imports: [RouterModule,ReactiveFormsModule, NgIf, NgFor, DatePipe, CurrencyPipe],
   templateUrl: './hotel-request.html',
   styleUrl: './hotel-request.scss'
 })

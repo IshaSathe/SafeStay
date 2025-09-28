@@ -1,3 +1,94 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;               
+  background-color: #6ca576;
+  color: #fff;
+  font-size: 20px;
+  padding: 15px 40px;
+  border-radius: 25px;
+  margin: 20px;
+}
+
+.logo a {
+    font-size: 30px;
+    padding: 0 20px;
+    margin-right: 200px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    color: white;
+}
+
+
+.nav-links a {
+  gap: 100px;
+  margin-right: 40px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.contact-btn {
+  background-color: rgb(255, 255, 255);
+  margin-left: 270px;
+  color: #0f1b23;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.info-card {
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;  // aligns tops evenly
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
+
+  .info-content {
+    flex: 1;   // takes left side
+  }
+
+  .card {
+    flex: 2;   // slightly wider right side
+  }
+}
+
+
+//info page
+
+.info-content {
+  flex: 1;
+  flex-direction: column;   // stack children vertically
+  align-items: flex-start;      // center them horizontally
+  justify-content: flex-start;  // center vertically within box
+  max-width: 1300px;
+  background-color: #c4ddf7;
+  text-align: center;
+  border-radius: 15px;
+  padding:40px;
+}
+
+.info-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 10px;
+  color: rgb(36, 34, 34);
+}
+
+.info-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #272424;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+
+
 .card {
   max-width: 900px; margin: 2rem auto; padding: 1.25rem;
   border: 1px solid #e5e7eb; border-radius: 12px; background: #fff;
