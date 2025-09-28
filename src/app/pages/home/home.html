@@ -1,1 +1,51 @@
-<p>home works!</p>
+
+<header class="navbar">
+  <img src="logo1.png" alt="My photo" style="display:inline-block" width="60" height="60">
+  <nav class="logo">
+    <a routerLink="/">SafeStay</a>
+  </nav>
+  <nav class="nav-links">
+    <a routerLink="/login">Button</a>
+    <a routerLink="/login">Testimonials</a>
+    <a href="javascript:void(0)" onclick="document.getElementById('about-section').scrollIntoView({behavior: 'smooth'})">
+    About Us</a>
+  </nav>
+  <button class="contact-btn">Contact Us</button>
+</header>
+
+<section class="hero">
+  <h1>Transforming Lives</h1>
+  <p>Providing housing and stability for all, one SafeStay at a time.</p>
+  <button class="hero-btn" routerLink="/login">Explore More</button>
+</section>
+
+<!-- Services Bar -->
+<section class="services-bar">
+  <div class="service">Find a SafeStay</div>
+  <div class="divider">✦</div>
+  <div class="service">Volunteer</div>
+  <div class="divider">✦</div>
+  <div class="service">Sponsor a SafeStay</div>
+</section>
+
+<hr style="height: 3px; background-color: black; border: none; margin-top: 10px">
+
+<!-- about.component.html -->
+<section id="about-section" class="about-section">
+  <div class="about-content">
+    <h2>About Us</h2>
+    <p>
+      At SafeStay, we believe everyone deserves to feel at home.
+
+      Our platform connects caring individuals and organizations with opportunities to sponsor hotel rooms and other forms of temporary housing for people experiencing homelessness. By working together, we provide more than just shelter — we offer dignity, comfort, and the foundation for a fresh start. SafeStay is built on compassion, community, and the simple idea that when we care for each other, everyone is safer.
+    </p>
+    <button class="learn-btn">Learn More</button>
+  </div>
+
+  <div class="about-image">
+  <img src="keys.jpg" alt="My photo" style="display:inline-block">
+</div>
+</section>
+
+
+
