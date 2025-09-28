@@ -175,3 +175,22 @@
   border-radius: 15px;
   object-fit: cover;
 }
+
+
+.testimonials {
+  display: flex;
+  justify-content: center;   /* centers the row */
+  gap: 1.5rem;               /* spacing between boxes */
+  flex-wrap: wrap;           /* wraps to next row on small screens */
+  margin: 2rem 0;
+}
+
+.testimonial {
+  flex: 1 1 300px;           /* responsive width, min 300px */
+  background-color: #c1cbe0; /* light neutral background */
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  font-style: italic;
+  line-height: 1.5;
+}
