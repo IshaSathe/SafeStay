@@ -1,1 +1,65 @@
-<p>homes-available works!</p>
+<div class="wrap">
+    <hr style="margin: 1rem 0;" />
+
+    <section>
+        <h2>Your applications</h2>
+        <div *ngIf="loadingApps()">Loading your applications…</div>
+        <div *ngIf="!loadingApps() && !myApps().length" class="muted">You have not applied yet.</div>
+
+        <div *ngFor="let a of myApps()" class="app-card">
+            <div class="row">
+                <div class="title">
+                    <strong>{{ a.listing?.title || ('Listing #' + a.listing?.id) }}</strong>
+                    <span class="sub"> • {{ a.listing?.city }}<span *ngIf="a.listing?.state">, {{ a.listing?.state
+                            }}</span></span>
+                </div>
+                <span class="badge" [class.pending]="a.status==='PENDING'" [class.ok]="a.status==='APPROVED'"
+                    [class.err]="a.status==='DECLINED'">
+                    {{ a.status }}
+                </span>
+            </div>
+
+            <div class="sub">{{ a.startDate | date:'MMM d' }} → {{ a.endDate | date:'MMM d, y' }}</div>
+            <div class="sub">Occupants: {{ a.occupants }}</div>
+            <div class="sub" *ngIf="a.listing?.nightlyCents != null">
+                Nightly: {{ (a.listing.nightlyCents/100) | currency:'USD' }}
+            </div>
+            <div class="sub" *ngIf="a.message">Message: {{ a.message }}</div>
+        </div>
+    </section>
+
+    <h1>Available homes</h1>
+
+    <form [formGroup]="filter" (ngSubmit)="refresh()" class="filter">
+        <input type="text" placeholder="Filter by city…" formControlName="city">
+        <button>Search</button>
+    </form>
+
+    <p class="err" *ngIf="error()">{{ error() }}</p>
+    <div *ngIf="loading()">Loading…</div>
+
+    <div *ngFor="let l of listings()" class="card">
+        <div class="head" (click)="toggle(l.id)">
+            <div>
+                <strong>{{ l.title }}</strong> • {{ l.city }}<span *ngIf="l.state">, {{ l.state }}</span>
+                <div class="sub">
+                    Max guests: {{ l.maxGuests }}
+                    <span *ngIf="l.nightlyCents != null"> • {{ (l.nightlyCents/100) | currency:'USD' }} / night</span>
+                    <span *ngIf="l.availableFrom"> • From: {{ l.availableFrom | date:'MMM d, y' }}</span>
+                    <span *ngIf="l.availableTo"> → {{ l.availableTo | date:'MMM d, y' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="expand" *ngIf="expandedId() === l.id">
+            <p class="desc">{{ l.description || 'No description' }}</p>
+            <form [formGroup]="appForm" (ngSubmit)="apply(l)" class="apply">
+                <label><span>Occupants</span><input type="number" min="1" formControlName="occupants"></label>
+                <label><span>Start</span><input type="date" formControlName="startDate"></label>
+                <label><span>End</span><input type="date" formControlName="endDate"></label>
+                <label class="grow"><span>Message</span><input type="text" formControlName="message"></label>
+                <button [disabled]="appForm.invalid">Apply</button>
+            </form>
+        </div>
+    </div>
+</div>

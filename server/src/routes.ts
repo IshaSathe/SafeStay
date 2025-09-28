@@ -70,7 +70,7 @@ router.get('/sponsor/summary', authGuard, requireRole(Role.SPONSOR), (_req, res)
 // --- Hotel search (by city -> offers)
 router.get('/ext/hotels/search', authGuard, requireRole(Role.SEEKER), async (req, res) => {
   try {
-    const q = req.query as Record<string,string>;
+    const q = req.query as Record<string, string>;
     const cityCode = q.cityCode;
     const checkInDate = q.checkInDate;
     const checkOutDate = q.checkOutDate;
@@ -123,9 +123,9 @@ function parseCreateRequestBody(body: any) {
 
   // Required
   if (!body?.startDate) errors.push('startDate required');
-  if (!body?.endDate)   errors.push('endDate required');
+  if (!body?.endDate) errors.push('endDate required');
   if (body?.guests == null) errors.push('guests required');
-  if (!body?.city) errors.push('city required');
+  if (!body?.cityCode) errors.push('city required');
 
   if (errors.length) return { ok: false, errors };
 
@@ -158,7 +158,7 @@ router.post('/requests', authGuard, requireRole(Role.SEEKER), async (req, res) =
     Number.isFinite(Number(req.body.goalCents)) && Number(req.body.goalCents) > 0
       ? Math.round(Number(req.body.goalCents))
       : null;
-  
+
   const user = (req as any).user as { sub: number };
   const created = await prisma.hotelRequest.create({
     data: {
@@ -277,5 +277,164 @@ router.post('/requests/:id/contributions', authGuard, requireRole(Role.SPONSOR),
     }
   });
 });
+
+// ------------------------ HOMES: LISTINGS & APPLICATIONS ------------------------
+
+/** Create a home listing (SPONSOR) */
+router.post('/homes', authGuard, requireRole(Role.SPONSOR), async (req, res) => {
+  const b = req.body ?? {};
+  const errors: string[] = [];
+  if (!b.title) errors.push('title is required');
+  if (!b.city) errors.push('city is required');
+  if (b.maxGuests == null) errors.push('maxGuests is required');
+
+  if (errors.length) return res.status(400).json({ message: 'Invalid body', errors });
+
+  const sponsor = (req as any).user as { sub: number };
+  const nightlyCents = b.nightlyCents != null ? Number(b.nightlyCents) : null;
+  const created = await prisma.homeListing.create({
+    data: {
+      sponsorId: sponsor.sub,
+      title: String(b.title),
+      description: b.description ? String(b.description) : null,
+      city: String(b.city),
+      state: b.state ? String(b.state) : null,
+      maxGuests: Number(b.maxGuests),
+      nightlyCents: (nightlyCents != null && Number.isFinite(nightlyCents) && nightlyCents >= 0) ? nightlyCents : null,
+      availableFrom: b.availableFrom ? new Date(b.availableFrom) : null,
+      availableTo: b.availableTo ? new Date(b.availableTo) : null,
+      status: 'OPEN'
+    }
+  });
+  res.status(201).json({ listing: created });
+});
+
+/** Get open listings (SEEKER browse) */
+router.get('/homes', authGuard, requireRole(Role.SEEKER), async (req, res) => {
+  const city = (req.query.city as string | undefined)?.trim();
+  const where: any = { status: 'OPEN' };
+  if (city) where.city = { contains: city, mode: 'insensitive' };
+
+  const rows = await prisma.homeListing.findMany({
+    where,
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true, title: true, description: true, city: true, state: true,
+      maxGuests: true, nightlyCents: true, availableFrom: true, availableTo: true,
+      status: true, createdAt: true
+    }
+  });
+  res.json({ listings: rows });
+});
+
+/** Sponsor: my own listings */
+router.get('/homes/mine', authGuard, requireRole(Role.SPONSOR), async (req, res) => {
+  const sponsor = (req as any).user as { sub: number };
+  const rows = await prisma.homeListing.findMany({
+    where: { sponsorId: sponsor.sub },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true, title: true, city: true, state: true, status: true,
+      nightlyCents: true, maxGuests: true, availableFrom: true, availableTo: true, createdAt: true
+    }
+  });
+  res.json({ listings: rows });
+});
+
+/** Toggle listing status (OPEN/CLOSED) (SPONSOR owner) */
+router.patch('/homes/:id/status', authGuard, requireRole(Role.SPONSOR), async (req, res) => {
+  const id = Number(req.params.id);
+  const status = String(req.body?.status || '').toUpperCase();
+  if (!['OPEN', 'CLOSED'].includes(status)) return res.status(400).json({ message: 'status must be OPEN or CLOSED' });
+
+  const sponsor = (req as any).user as { sub: number };
+  const listing = await prisma.homeListing.findUnique({ where: { id } });
+  if (!listing || listing.sponsorId !== sponsor.sub) return res.sendStatus(404);
+
+  const updated = await prisma.homeListing.update({ where: { id }, data: { status } });
+  res.json({ listing: updated });
+});
+
+/** Seeker: apply to a listing */
+router.post('/homes/:id/applications', authGuard, requireRole(Role.SEEKER), async (req, res) => {
+  const id = Number(req.params.id);
+  const b = req.body ?? {};
+  const errors: string[] = [];
+  if (b.occupants == null) errors.push('occupants required');
+  if (!b.startDate) errors.push('startDate required');
+  if (!b.endDate) errors.push('endDate required');
+  if (errors.length) return res.status(400).json({ message: 'Invalid body', errors });
+
+  const listing = await prisma.homeListing.findUnique({ where: { id } });
+  if (!listing || listing.status !== 'OPEN') return res.status(404).json({ message: 'Listing not found or not open' });
+
+  const start = new Date(b.startDate), end = new Date(b.endDate);
+  if (!(end > start)) return res.status(400).json({ message: 'endDate must be after startDate' });
+
+  const seeker = (req as any).user as { sub: number };
+  const created = await prisma.homeApplication.create({
+    data: {
+      listingId: id,
+      seekerId: seeker.sub,
+      occupants: Number(b.occupants),
+      startDate: start,
+      endDate: end,
+      message: b.message ? String(b.message) : null,
+      status: 'PENDING'
+    }
+  });
+  res.status(201).json({ application: created });
+});
+
+/** Sponsor: view applications for a listing I own */
+router.get('/homes/:id/applications', authGuard, requireRole(Role.SPONSOR), async (req, res) => {
+  const id = Number(req.params.id);
+  const sponsor = (req as any).user as { sub: number };
+
+  const listing = await prisma.homeListing.findUnique({ where: { id } });
+  if (!listing || listing.sponsorId !== sponsor.sub) return res.sendStatus(404);
+
+  const apps = await prisma.homeApplication.findMany({
+    where: { listingId: id },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true, occupants: true, startDate: true, endDate: true, message: true, status: true,
+      seeker: { select: { id: true, email: true } }, createdAt: true
+    }
+  });
+  res.json({ applications: apps });
+});
+
+/** Sponsor: approve/decline an application I own */
+router.patch('/home-applications/:appId', authGuard, requireRole(Role.SPONSOR), async (req, res) => {
+  const appId = Number(req.params.appId);
+  const decision = String(req.body?.status || '').toUpperCase(); // "APPROVED" | "DECLINED"
+  if (!['APPROVED', 'DECLINED'].includes(decision)) return res.status(400).json({ message: 'status must be APPROVED or DECLINED' });
+
+  // Ensure the application belongs to a listing owned by this sponsor
+  const app = await prisma.homeApplication.findUnique({ where: { id: appId }, include: { listing: true } });
+  const sponsor = (req as any).user as { sub: number };
+  if (!app || app.listing.sponsorId !== sponsor.sub) return res.sendStatus(404);
+
+  const updated = await prisma.homeApplication.update({ where: { id: appId }, data: { status: decision } });
+  res.json({ application: updated });
+});
+
+// GET /api/home-applications/mine  (SEEKER)
+router.get('/home-applications/mine', authGuard, requireRole(Role.SEEKER), async (req, res) => {
+  const user = (req as any).user as { sub: number };
+  const apps = await prisma.homeApplication.findMany({
+    where: { seekerId: user.sub },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true, occupants: true, startDate: true, endDate: true, message: true, status: true, createdAt: true,
+      listing: {
+        select: { id: true, title: true, city: true, state: true, nightlyCents: true, sponsorId: true }
+      }
+    }
+  });
+  res.json({ applications: apps });
+});
+
 
 export default router;

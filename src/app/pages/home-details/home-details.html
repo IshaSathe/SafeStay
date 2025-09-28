@@ -1,1 +1,18 @@
-<p>home-details works!</p>
+<div class="card">
+  <h1>Offer a room at your home</h1>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label><span>Title</span><input type="text" formControlName="title"></label>
+    <label><span>Description</span><textarea rows="3" formControlName="description"></textarea></label>
+    <div class="grid">
+      <label><span>City</span><input type="text" formControlName="city"></label>
+      <label><span>State</span><input type="text" formControlName="state"></label>
+      <label><span>Max guests</span><input type="number" min="1" formControlName="maxGuests"></label>
+      <label><span>Nightly amount (USD, 0 = free)</span><input type="number" min="0" formControlName="nightlyUSD"></label>
+      <label><span>Available from</span><input type="date" formControlName="availableFrom"></label>
+      <label><span>Available to</span><input type="date" formControlName="availableTo"></label>
+    </div>
+    <button [disabled]="loading()">Create listing</button>
+    <p class="ok" *ngIf="successId()">Listing #{{ successId() }} created.</p>
+    <p class="err" *ngIf="error()">{{ error() }}</p>
+  </form>
+</div>
