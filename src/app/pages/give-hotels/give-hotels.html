@@ -9,7 +9,7 @@
     <div class="head" (click)="toggleExpand(r.id)">
       <div class="title">
         <strong>Request #{{ r.id }}</strong>
-        <span> • {{ r.city }}{{ r.state ? (', ' + r.state) : '' }} • {{ r.guests }} guest(s)</span>
+        <span> • {{ r.cityCode }} • {{ r.guests }} guest(s)</span>
         <div class="sub">
           {{ r.startDate | date:'MMM d' }} → {{ r.endDate | date:'MMM d, y' }}
           <span *ngIf="r.seeker?.email"> • by {{ r.seeker.email }}</span>
