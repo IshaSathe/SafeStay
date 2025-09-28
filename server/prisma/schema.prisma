@@ -22,4 +22,38 @@ model User {
   passwordHash String
   role         Role
   createdAt    DateTime @default(now())
+  HotelRequest HotelRequest[]
 }
+
+enum RequestStatus {
+  PENDING   // created, waiting for review
+  OPEN      // visible to sponsors
+  FULFILLED // stay completed
+  CANCELLED
+}
+
+
+model HotelRequest {
+  id            Int           @id @default(autoincrement())
+  seekerId      Int
+  seeker        User          @relation(fields: [seekerId], references: [id])
+
+  startDate     DateTime
+  endDate       DateTime
+  guests        Int
+  rooms         Int?
+  city          String
+  state         String?
+  cityCode      String?        // IATA (e.g., DEL, PHX), optional
+  maxNightlyUSD Int?
+  notes         String?
+
+  // Link to chosen Amadeus hotel/offer
+  amadeusHotelId String?
+  amadeusOfferId String?
+
+  status        RequestStatus  @default(PENDING)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
