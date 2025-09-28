@@ -17,26 +17,27 @@ enum Role {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
   passwordHash String
   role         Role
-  createdAt    DateTime @default(now())
+  createdAt    DateTime       @default(now())
   HotelRequest HotelRequest[]
+  Contribution Contribution[]
 }
 
 enum RequestStatus {
-  PENDING   // created, waiting for review
-  OPEN      // visible to sponsors
-  FULFILLED // stay completed
+  PENDING
+  OPEN
+  MATCHED
+  FULFILLED
   CANCELLED
 }
 
-
 model HotelRequest {
-  id            Int           @id @default(autoincrement())
-  seekerId      Int
-  seeker        User          @relation(fields: [seekerId], references: [id])
+  id       Int  @id @default(autoincrement())
+  seekerId Int
+  seeker   User @relation(fields: [seekerId], references: [id])
 
   startDate     DateTime
   endDate       DateTime
@@ -44,16 +45,31 @@ model HotelRequest {
   rooms         Int?
   city          String
   state         String?
-  cityCode      String?        // IATA (e.g., DEL, PHX), optional
+  cityCode      String? // IATA (e.g., DEL, PHX), optional
   maxNightlyUSD Int?
   notes         String?
+
+  goalCents     Int?
 
   // Link to chosen Amadeus hotel/offer
   amadeusHotelId String?
   amadeusOfferId String?
 
-  status        RequestStatus  @default(PENDING)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  status    RequestStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  contributions Contribution[]
 }
 
+model Contribution {
+  id        Int          @id @default(autoincrement())
+  requestId Int
+  request   HotelRequest @relation(fields: [requestId], references: [id])
+
+  sponsorId Int
+  sponsor   User @relation(fields: [sponsorId], references: [id])
+
+  amountCents Int // store money as integer cents
+  createdAt   DateTime @default(now())
+}

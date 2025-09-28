@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { PrismaClient, Role, RequestStatus } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
 import { comparePassword, hashPassword, issueToken } from './auth';
 import jwt from 'jsonwebtoken';
 import { amadeusGET } from './amadeus';
@@ -154,15 +154,101 @@ router.post('/requests', authGuard, requireRole(Role.SEEKER), async (req, res) =
   const { ok, value, errors } = parseCreateRequestBody(req.body);
   if (!ok) return res.status(400).json({ message: 'Invalid body', errors });
 
+  const goalCents =
+    Number.isFinite(Number(req.body.goalCents)) && Number(req.body.goalCents) > 0
+      ? Math.round(Number(req.body.goalCents))
+      : null;
+  
   const user = (req as any).user as { sub: number };
   const created = await prisma.hotelRequest.create({
     data: {
       ...value,
       seekerId: user.sub,
-      status: RequestStatus.OPEN
+      amadeusHotelId: req.body.amadeusHotelId ?? null,
+      amadeusOfferId: req.body.amadeusOfferId ?? null,
+      goalCents: goalCents,
+      status: 'OPEN'
     }
   });
   res.status(201).json({ request: created });
+});
+
+// ---- Sponsor-facing: list requests with progress ----
+router.get('/requests/open', authGuard, requireRole(Role.SPONSOR), async (_req, res) => {
+  // Fetch OPEN and PENDING requests
+  const requests = await prisma.hotelRequest.findMany({
+    where: { status: { in: ['OPEN', 'PENDING'] } },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true, startDate: true, endDate: true, guests: true, rooms: true,
+      city: true, state: true, cityCode: true, maxNightlyUSD: true,
+      notes: true, amadeusHotelId: true, amadeusOfferId: true, goalCents: true,
+      seeker: { select: { id: true, email: true } }
+    }
+  });
+
+  // Aggregate raised per request (one-by-one for simplicity)
+  const withTotals = await Promise.all(
+    requests.map(async r => {
+      const sum = await prisma.contribution.aggregate({
+        where: { requestId: r.id },
+        _sum: { amountCents: true }
+      });
+      return {
+        ...r,
+        raisedCents: sum._sum.amountCents ?? 0
+      };
+    })
+  );
+
+  res.json({ requests: withTotals });
+});
+
+// ---- Sponsor contribute to a request ----
+router.post('/requests/:id/contributions', authGuard, requireRole(Role.SPONSOR), async (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isFinite(id)) return res.status(400).json({ message: 'Invalid request id' });
+
+  const amount = Number(req.body?.amountCents);
+  if (!Number.isFinite(amount) || amount <= 0) return res.status(400).json({ message: 'amountCents must be > 0' });
+
+  // Ensure the request exists and is fundable
+  const request = await prisma.hotelRequest.findUnique({ where: { id } });
+  if (!request) return res.sendStatus(404);
+  if (!['OPEN', 'PENDING'].includes(request.status)) {
+    return res.status(409).json({ message: 'Request is not accepting contributions' });
+  }
+
+  const sponsor = (req as any).user as { sub: number; role: Role };
+
+  // Create the contribution
+  await prisma.contribution.create({
+    data: { requestId: id, sponsorId: sponsor.sub, amountCents: amount }
+  });
+
+  // Recompute raised and optionally flip status to MATCHED/FULFILLED if goal reached
+  const agg = await prisma.contribution.aggregate({
+    where: { requestId: id },
+    _sum: { amountCents: true }
+  });
+  const raised = agg._sum.amountCents ?? 0;
+
+  let updated = request;
+  if (request.goalCents && raised >= request.goalCents && request.status !== 'FULFILLED') {
+    updated = await prisma.hotelRequest.update({
+      where: { id },
+      data: { status: 'FULFILLED' }
+    });
+  }
+
+  res.status(201).json({
+    request: {
+      id: updated.id,
+      goalCents: updated.goalCents,
+      status: updated.status,
+      raisedCents: raised
+    }
+  });
 });
 
 export default router;

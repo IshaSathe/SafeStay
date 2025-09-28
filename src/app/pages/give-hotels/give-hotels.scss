@@ -1,0 +1,33 @@
+.wrap { max-width: 900px; margin: 1.5rem auto; }
+h1 { font-size: 1.25rem; margin-bottom: .75rem; }
+
+.card {
+  border: 1px solid #e5e7eb; border-radius: 12px; background: #fff;
+  margin-bottom: .75rem; overflow: hidden;
+
+  .head {
+    display: flex; justify-content: space-between; gap: 1rem;
+    padding: .9rem 1rem; cursor: pointer; align-items: center;
+    &:hover { background: #fafafa; }
+  }
+  .title { font-size: 1rem;
+    .sub { color: #6b7280; font-size: .9rem; }
+  }
+
+  .goal { min-width: 260px;
+    .bar { height: 8px; background: #e5e7eb; border-radius: 6px; overflow: hidden; }
+    .fill { height: 100%; background: #10b981; }
+    .nums { display: flex; gap: .5rem; font-size: .9rem; margin-top: .25rem; }
+    .muted { color: #6b7280; }
+  }
+
+  .expand { padding: .9rem 1rem; border-top: 1px dashed #e5e7eb; }
+  .contrib { display: flex; gap: .5rem; align-items: end; margin-bottom: .5rem;
+    label { display: grid; gap: .25rem; }
+    input { width: 120px; padding: .4rem .5rem; border: 1px solid #d1d5db; border-radius: 8px; }
+    button { padding: .5rem .75rem; border: 0; border-radius: 8px; color: #fff; background: #111827; }
+  }
+  .meta { color: #6b7280; font-size: .9rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+}
+
+.err { color: #b91c1c; margin-bottom: .5rem; }

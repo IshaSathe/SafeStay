@@ -1,1 +1,47 @@
-<p>give-hotels works!</p>
+<div class="wrap">
+  <h1>Sponsor open hotel requests</h1>
+
+  <p class="err" *ngIf="error()">{{ error() }}</p>
+
+  <div *ngIf="loading()">Loading…</div>
+
+  <div *ngFor="let r of rows()" class="card">
+    <div class="head" (click)="toggleExpand(r.id)">
+      <div class="title">
+        <strong>Request #{{ r.id }}</strong>
+        <span> • {{ r.city }}{{ r.state ? (', ' + r.state) : '' }} • {{ r.guests }} guest(s)</span>
+        <div class="sub">
+          {{ r.startDate | date:'MMM d' }} → {{ r.endDate | date:'MMM d, y' }}
+          <span *ngIf="r.seeker?.email"> • by {{ r.seeker.email }}</span>
+        </div>
+      </div>
+
+      <div class="goal">
+        <div class="bar">
+          <div class="fill" [style.width.%]="progressPercent(r)"></div>
+        </div>
+        <div class="nums">
+          <span>Raised: {{ (r.raisedCents/100) | currency:'USD' }}</span>
+          <span *ngIf="r.goalCents">&nbsp;/ Goal: {{ (r.goalCents/100) | currency:'USD' }}</span>
+          <span *ngIf="!r.goalCents" class="muted">No goal set</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand" *ngIf="expandedId() === r.id">
+      <form [formGroup]="form" (ngSubmit)="contribute(r)" class="contrib">
+        <label>
+          <span>Contribute amount (USD)</span>
+          <input type="number" min="1" formControlName="amountUSD"/>
+        </label>
+        <button type="submit" [disabled]="form.invalid">Contribute</button>
+      </form>
+
+      <div class="meta">
+        <div>City code: {{ r.cityCode || '—' }}</div>
+        <div>Notes: {{ r.notes || '—' }}</div>
+        <div>Hotel: {{ r.amadeusHotelId || 'not selected' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
