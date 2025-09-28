@@ -1,0 +1,153 @@
+/* ===== Page wrapper & header ===== */
+.wrap {
+  max-width: 980px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+h1 {
+  margin: 4px 0 16px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.err { color: #b91c1c; margin: 8px 0 14px; }
+
+/* Top action (Add Listing) */
+.wrap > button[routerlink] {
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 600;
+  background: #111827;
+  color: #fff;
+  cursor: pointer;
+  transition: transform .04s ease, opacity .2s;
+  &:hover { opacity: .92; }
+  &:active { transform: translateY(1px); }
+}
+
+/* ===== Listing cards ===== */
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fff;
+  margin: 10px 0 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover { background: #fafafa; }
+
+    strong { font-size: 16px; font-weight: 600; }
+
+    .sub {
+      margin-top: 4px;
+      color: #6b7280;
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      button {
+        padding: 10px 12px;
+        border: 0;
+        border-radius: 10px;
+        font-weight: 600;
+        background: #0f766e; /* teal for status toggle */
+        color: #fff;
+        cursor: pointer;
+        transition: transform .04s ease, opacity .2s;
+        white-space: nowrap;
+        &:hover { opacity: .95; }
+        &:active { transform: translateY(1px); }
+        &:disabled { opacity: .6; cursor: not-allowed; }
+      }
+    }
+  }
+
+  .expand {
+    border-top: 1px dashed #e5e7eb;
+    background: #fcfcfc;
+    padding: 14px 16px;
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .app-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-top: 1px solid #f3f4f6;
+
+      &:first-of-type { border-top: 0; }
+
+      .sub { color: #6b7280; font-size: 13px; margin-top: 2px; }
+
+      .badges {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .3px;
+        border: 1px solid transparent;
+        &.pending { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+        &.ok      { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+        &.err     { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+      }
+
+      .decide {
+        display: flex;
+        gap: 8px;
+
+        button {
+          padding: 8px 10px;
+          border: 0;
+          border-radius: 10px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: transform .04s ease, opacity .2s;
+          &::first-letter { text-transform: uppercase; }
+
+          /* Approve / Decline colors */
+          &:first-child { background: #16a34a; color: #fff; } /* approve */
+          &:last-child  { background: #991b1b; color: #fff; } /* decline */
+
+          &:hover { opacity: .95; }
+          &:active { transform: translateY(1px); }
+          &:disabled { opacity: .6; cursor: not-allowed; }
+        }
+      }
+    }
+  }
+}
+
+/* ===== Utilities ===== */
+@media (max-width: 640px) {
+  .card .head { flex-direction: column; }
+  .card .head .actions { align-self: flex-start; }
+  .card .expand .app-row { flex-direction: column; }
+}

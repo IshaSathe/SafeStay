@@ -17,13 +17,15 @@ enum Role {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  email        String         @unique
-  passwordHash String
-  role         Role
-  createdAt    DateTime       @default(now())
-  HotelRequest HotelRequest[]
-  Contribution Contribution[]
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  passwordHash    String
+  role            Role
+  createdAt       DateTime          @default(now())
+  HotelRequest    HotelRequest[]
+  Contribution    Contribution[]
+  HomeListing     HomeListing[]
+  HomeApplication HomeApplication[]
 }
 
 enum RequestStatus {
@@ -49,7 +51,7 @@ model HotelRequest {
   maxNightlyUSD Int?
   notes         String?
 
-  goalCents     Int?
+  goalCents Int?
 
   // Link to chosen Amadeus hotel/offer
   amadeusHotelId String?
@@ -72,4 +74,42 @@ model Contribution {
 
   amountCents Int // store money as integer cents
   createdAt   DateTime @default(now())
+}
+
+model HomeListing {
+  id        Int  @id @default(autoincrement())
+  sponsorId Int
+  sponsor   User @relation(fields: [sponsorId], references: [id])
+
+  title         String
+  description   String?
+  city          String // minimal location; adjust as needed
+  state         String? // optional
+  maxGuests     Int
+  nightlyCents  Int? // null or 0 means free
+  availableFrom DateTime?
+  availableTo   DateTime?
+
+  status    String   @default("OPEN") // "OPEN" | "CLOSED"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  applications HomeApplication[]
+}
+
+model HomeApplication {
+  id        Int         @id @default(autoincrement())
+  listingId Int
+  listing   HomeListing @relation(fields: [listingId], references: [id])
+
+  seekerId Int
+  seeker   User @relation(fields: [seekerId], references: [id])
+
+  occupants Int
+  startDate DateTime
+  endDate   DateTime
+  message   String?
+
+  status    String   @default("PENDING") // "PENDING" | "APPROVED" | "DECLINED"
+  createdAt DateTime @default(now())
 }

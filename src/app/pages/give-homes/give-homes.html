@@ -1,3 +1,43 @@
-<p>give-homes works!</p>
-<button routerLink="/home-details">Home Details</button>
-<button routerLink="/applications">Applications</button>
+<div class="wrap">
+  <h1>My home listings</h1>
+  <button routerLink="/home-details">Add Listing</button>
+  <p class="err" *ngIf="error()">{{ error() }}</p>
+
+  <div *ngFor="let l of rows()" class="card">
+    <div class="head" (click)="toggle(l.id)">
+      <div>
+        <strong>{{ l.title }}</strong> • {{ l.city }}<span *ngIf="l.state">, {{ l.state }}</span>
+        <div class="sub">
+          Status: {{ l.status }}
+          <span *ngIf="l.nightlyCents != null"> • {{ (l.nightlyCents/100) | currency:'USD' }} / night</span>
+          <span *ngIf="l.availableFrom"> • {{ l.availableFrom | date:'MMM d, y' }}</span>
+          <span *ngIf="l.availableTo"> → {{ l.availableTo | date:'MMM d, y' }}</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button (click)="setStatus(l, l.status === 'OPEN' ? 'CLOSED' : 'OPEN')">
+          {{ l.status === 'OPEN' ? 'Close' : 'Reopen' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="expand" *ngIf="expandedId() === l.id">
+      <h3>Applications</h3>
+      <div *ngIf="!(apps()[l.id]?.length)">No applications yet.</div>
+      <div *ngFor="let a of apps()[l.id]" class="app-row">
+        <div>
+          {{ a.seeker?.email || 'Seeker' }} • {{ a.occupants }} occupant(s)
+          <div class="sub">{{ a.startDate | date:'MMM d' }} → {{ a.endDate | date:'MMM d, y' }}</div>
+          <div class="sub" *ngIf="a.message">{{ a.message }}</div>
+        </div>
+        <div class="badges">
+          <span class="badge" [class.pending]="a.status==='PENDING'" [class.ok]="a.status==='APPROVED'" [class.err]="a.status==='DECLINED'">{{ a.status }}</span>
+          <div class="decide" *ngIf="a.status==='PENDING'">
+            <button (click)="decide(a.id, 'APPROVED', l.id)">Approve</button>
+            <button (click)="decide(a.id, 'DECLINED', l.id)">Decline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
