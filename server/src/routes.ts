@@ -173,6 +173,33 @@ router.post('/requests', authGuard, requireRole(Role.SEEKER), async (req, res) =
   res.status(201).json({ request: created });
 });
 
+router.get('/requests/mine/with-progress', authGuard, requireRole(Role.SEEKER), async (req, res) => {
+  const user = (req as any).user as { sub: number };
+
+  const rows = await prisma.hotelRequest.findMany({
+    where: { seekerId: user.sub },
+    orderBy: { createdAt: 'desc' },
+    select: {
+      id: true, startDate: true, endDate: true, city: true, state: true,
+      guests: true, rooms: true, goalCents: true, status: true,
+      amadeusHotelId: true, amadeusOfferId: true, createdAt: true
+    }
+  });
+
+  const withTotals = await Promise.all(rows.map(async r => {
+    const agg = await prisma.contribution.aggregate({
+      where: { requestId: r.id },
+      _sum: { amountCents: true }
+    });
+    const raisedCents = agg._sum.amountCents ?? 0;
+    const pct = r.goalCents ? Math.min(100, Math.floor((raisedCents / r.goalCents) * 100)) : 0;
+    return { ...r, raisedCents, percent: pct };
+  }));
+
+  res.json({ requests: withTotals });
+});
+
+
 // ---- Sponsor-facing: list requests with progress ----
 router.get('/requests/open', authGuard, requireRole(Role.SPONSOR), async (_req, res) => {
   // Fetch OPEN and PENDING requests
