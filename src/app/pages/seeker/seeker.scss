@@ -1,0 +1,219 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;               
+  background-color: #6ca576;
+  color: #fff;
+  font-size: 20px;
+  padding: 15px 40px;
+  border-radius: 25px;
+  margin: 20px;
+}
+
+.logo a {
+    font-size: 30px;
+    padding: 0 20px;
+    margin-right: 200px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    color: white;
+}
+
+
+.nav-links a {
+  gap: 100px;
+  margin-right: 40px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.contact-btn {
+  background-color: rgb(255, 255, 255);
+  margin-left: 270px;
+  color: #0f1b23;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+//landing section
+.land-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #eaedf0;
+  text-align: center;
+  border-radius: 0px;
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+
+.land-content {
+  flex: 1;
+}
+
+.land-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  margin-top:15px;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.land-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #333;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.homesection-btn {
+  background-color: #0a0a0a;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+  margin-right:25px;
+}
+
+.hotelsection-btn {
+  background-color: #0a0a0a;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+
+.home-section {
+ display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #f8f0d8;
+  text-align: left;
+  border-radius: 25px;
+  margin-top: 30px;
+}
+
+.home-content {
+  flex: 1;
+}
+
+.home-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #333;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.home-btn {
+  background-color: #0a0a0a;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.home-btn:hover {
+  background-color: #333;
+}
+
+
+.home-image {
+  flex: 1;
+}
+
+.home-image img {
+  width: 100px;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+
+//hotel section
+.hotel-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #d8edf5;
+  text-align: left;
+  border-radius: 25px;
+  margin-top: 50px;
+}
+
+.hotel-content {
+  flex: 1;
+}
+
+.hotel-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hotel-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #333;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.hotel-btn {
+  background-color: #0a0a0a;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.hotel-btn:hover {
+  background-color: #333;
+}
+
+
+.hotel-image {
+  flex: 1;
+}
+
+.hotel-image img {
+  border-radius: 45px;
+  object-fit: cover;
+}
