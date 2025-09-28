@@ -86,12 +86,15 @@
 }
 
 .hero-btn {
+  display:inline-block;
   background-color: #0f1b23;
   color: white;
   border: none;
   padding: 12px 30px;
   border-radius: 25px;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 15px;
+  text-decoration:none;
   cursor: pointer;
 }
 
@@ -100,7 +103,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #c1c5aa;
+  background-color: #c5b9aa;
   padding: 15px;
   border-radius: 25px;
   margin: 20px;
@@ -135,6 +138,7 @@
   font-size: 2.5rem;
   margin-bottom: 1rem;
   font-weight: 700;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .about-content p {
@@ -142,6 +146,7 @@
   line-height: 1.6;
   margin-bottom: 2rem;
   color: #333;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .learn-btn {
@@ -160,9 +165,13 @@
 }
 
 
-#slideshow {
+
+.about-image {
+  flex: 1;
+}
+
+.about-image img {
   width: 100%;
   border-radius: 15px;
   object-fit: cover;
-  transition: opacity 1s ease-in-out;
 }
