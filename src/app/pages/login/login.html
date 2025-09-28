@@ -1,1 +1,50 @@
-<p>login works!</p>
+<div class="auth-card">
+  <h1 class="title">{{ isLogin() ? 'Sign in' : 'Create account' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <!-- Email -->
+    <label class="field">
+      <span>Email</span>
+      <input type="email" formControlName="email" autocomplete="email" />
+    </label>
+    <div class="error" *ngIf="emailInvalid">Enter a valid email address.</div>
+
+    <!-- Password -->
+    <label class="field">
+      <span>Password</span>
+      <input type="password" formControlName="password" autocomplete="current-password" />
+    </label>
+    <div class="error" *ngIf="passwordInvalid">Password is required (min 8 chars).</div>
+
+    <!-- Role (only in register mode) -->
+    <div *ngIf="isRegister()">
+      <label class="field">
+        <span>Account type</span>
+        <select formControlName="role">
+          <option value="SEEKER">Looking for support</option>
+          <option value="SPONSOR">Providing support</option>
+        </select>
+      </label>
+      <div class="error" *ngIf="roleInvalid">Please select an account type.</div>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn" type="submit" [disabled]="form.invalid || loading()">
+      {{ loading() ? (isLogin() ? 'Signing in…' : 'Creating…') : (isLogin() ? 'Sign in' : 'Create account') }}
+    </button>
+
+    <p class="error" *ngIf="error()">{{ error() }}</p>
+  </form>
+
+  <!-- Mode switch -->
+  <div class="switch">
+    <span *ngIf="isLogin()">
+      Don’t have an account?
+      <button type="button" class="link" (click)="switchTo('register')">Create one</button>
+    </span>
+    <span *ngIf="isRegister()">
+      Already have an account?
+      <button type="button" class="link" (click)="switchTo('login')">Sign in</button>
+    </span>
+  </div>
+</div>
