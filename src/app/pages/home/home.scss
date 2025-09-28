@@ -1,0 +1,168 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;               
+  background-color: #6ca576;
+  color: #fff;
+  font-size: 20px;
+  padding: 15px 40px;
+  border-radius: 25px;
+  margin: 20px;
+}
+
+.logo a {
+    font-size: 30px;
+    padding: 0 20px;
+    margin-right: 200px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    color: white;
+}
+
+
+.nav-links a {
+  gap: 100px;
+  margin-right: 40px;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.contact-btn {
+  background-color: rgb(146, 89, 89);
+  margin-left: 270px;
+  color: #0f1b23;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.hero {
+  background-color: #502f2f;
+  text-align: center;
+  background-image: url('https://img1.10bestmedia.com/Images/Photos/419369/GettyImages-1404885159_54_990x660.jpg?auto=webp&width=3840&quality=75'); /* Replace with your image path */
+  background-size: cover; /* Makes image cover the section */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevents tiling */
+  padding: 120px 20px;
+  border-radius: 25px;
+  margin: 20px;
+}
+
+.contact-btn {
+  background-color: #232e35;
+  color: #ffffff;
+  border: white;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+  background-color: #c0c0c0;
+  text-align: center;
+  padding: 120px 20px;
+  border-radius: 25px;
+  margin: 20px;
+}
+
+.hero h1 {
+  font-size: 4.5rem;
+  margin-bottom: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: white;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.hero-btn {
+  background-color: #0f1b23;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  cursor: pointer;
+}
+
+/* Services Bar */
+.services-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #c1c5aa;
+  padding: 15px;
+  border-radius: 25px;
+  margin: 20px;
+}
+
+.service {
+  margin: 0 10px;
+  font-weight: 500;
+}
+
+.divider {
+  margin: 0 10px;
+}
+
+
+/* about.component.css */
+.about-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.about-content {
+  flex: 1;
+}
+
+.about-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.about-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.learn-btn {
+  background-color: #0a0a0a;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.learn-btn:hover {
+  background-color: #333;
+}
+
+
+#slideshow {
+  width: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+  transition: opacity 1s ease-in-out;
+}

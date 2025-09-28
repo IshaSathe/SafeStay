@@ -1,1 +1,55 @@
-<p>home works!</p>
+
+<header class="navbar">
+  <img src="logo1.png" alt="My photo" style="display:inline-block" width="60" height="60">
+  <nav class="logo">
+    <a routerLink="/">SafeStay</a>
+  </nav>
+  <nav class="nav-links">
+    <a routerLink="/login">Button</a>
+    <a routerLink="/login">Testimonials</a>
+    <a routerLink="/login">Other</a>
+  </nav>
+  <button class="contact-btn">Contact Us</button>
+</header>
+
+<section class="hero">
+  <h1>Transforming Lives</h1>
+  <p>Providing housing and stability for all, one SafeStay at a time.</p>
+  <button class="hero-btn">Explore More</button>
+</section>
+
+<!-- Services Bar -->
+<section class="services-bar">
+  <div class="service">Wellness Consultancy Services</div>
+  <div class="divider">✦</div>
+  <div class="service">Wellness Consultancy Services</div>
+  <div class="divider">✦</div>
+  <div class="service">Wellness Consultancy Services</div>
+</section>
+
+<hr style="height: 3px; background-color: black; border: none; margin-top: 10px">
+
+<!-- about.component.html -->
+<section class="about-section">
+  <div class="about-content">
+    <h2>About</h2>
+    <p>
+      At A. Johnson, we are dedicated to revolutionizing work environments by
+      prioritizing employee wellness. Our consultancy specializes in
+      personalized workshops, mindfulness training, ergonomic assessments, and
+      nutritional guidance. Our mission is to elevate productivity and boost
+      morale through tailored wellness programs.
+    </p>
+    <button class="learn-btn">Learn More</button>
+  </div>
+
+  <div class="about-image">
+    <!-- 👇 Angular binding to component property -->
+    <img
+      [src]="images[currentIndex]"
+      alt="About slideshow"
+      id="slideshow"
+    />
+  </div>
+</section>
+
